@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: imdb-api
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: imdb-api
