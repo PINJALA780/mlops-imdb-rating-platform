@@ -6,23 +6,32 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout repository
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
+      # Setup Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      # Login to Docker Hub
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # Build and Push Docker Image
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v6
         with:
@@ -31,17 +40,23 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/imdb-rating-api:latest
 
-      - name: Update Kubernetes Manifest
+      # Update Kubernetes Deployment
+      - name: Update Kubernetes Deployment
         run: |
           sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/imdb-rating-api:latest|g" k8s/deployment.yaml
 
+      # Commit and Push Changes
       - name: Commit and Push Changes
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add k8s/deployment.yaml
 
-          git diff --cached --quiet || git commit -m "Update image [skip ci]"
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
 
-          git push
+          git commit -m "Update deployment image [skip ci]"
+          git push origin main
