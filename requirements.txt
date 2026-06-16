@@ -1,0 +1,9 @@
+pandas
+numpy
+scikit-learn
+joblib
+fastapi
+uvicorn
+mlflow
+dvc[s3]
+prometheus-fastapi-instrumentator
