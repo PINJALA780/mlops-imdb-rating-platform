@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Checkout repo
+    # 1. Checkout code
     - name: Checkout code
       uses: actions/checkout@v3
 
@@ -25,23 +25,22 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    # 4. Build Docker image (FIXED - dot added)
-    - name: Build Docker image
+    # 4. Build AND PUSH Docker image (FIXED)
+    - name: Build and Push Docker image
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/imdb-rating-api:latest .
+        docker buildx build \
+          --platform linux/amd64 \
+          -t ${{ secrets.DOCKERHUB_USERNAME }}/imdb-rating-api:latest \
+          --push \
+          .
 
-    # 5. Push Docker image
-    - name: Push Docker image
-      run: |
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/imdb-rating-api:latest
-
-    # 6. Update Kubernetes deployment image
+    # 5. Update Kubernetes deployment image
     - name: Update Kubernetes manifest
       run: |
         sed -i "s|image:.*|image: ${{ secrets.DOCKERHUB_USERNAME }}/imdb-rating-api:latest|g" k8s/deployment.yaml
 
-    # 7. Commit changes back to repo (for ArgoCD)
-    - name: Commit updated manifest
+    # 6. Commit updated manifest back to repo (for ArgoCD)
+    - name: Commit changes
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
