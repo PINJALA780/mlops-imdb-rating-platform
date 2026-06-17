@@ -1,197 +1,418 @@
-# 🎬 IMDb Rating Prediction — End-to-End Production MLOps Platform
+# 🎬 IMDb Rating Prediction Platform
+
+## End-to-End Production MLOps Pipeline with Kubernetes, GitOps, CI/CD, Monitoring & Model Versioning
+
+![MLOps](https://img.shields.io/badge/MLOps-Production%20Ready-blue)
+![Python](https://img.shields.io/badge/Python-3.11-green)
+![Docker](https://img.shields.io/badge/Docker-Enabled-blue)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-Orchestrated-blue)
+![GitHub Actions](https://img.shields.io/badge/CI%2FCD-Automated-success)
+![ArgoCD](https://img.shields.io/badge/GitOps-ArgoCD-red)
+![Prometheus](https://img.shields.io/badge/Monitoring-Prometheus-orange)
+![Grafana](https://img.shields.io/badge/Dashboard-Grafana-yellow)
+
+---
 
 # 📌 Project Overview
 
-This project is a **production-grade end-to-end MLOps system** that automates the full machine learning lifecycle — from data ingestion to training, model tracking, containerization, CI/CD, Kubernetes deployment, GitOps, and monitoring.
+This project demonstrates a **Production-Grade End-to-End MLOps Platform** for IMDb Rating Prediction.
 
-It demonstrates real-world DevOps + ML engineering practices used in modern cloud-native systems.
+The entire machine learning lifecycle is automated using modern DevOps and MLOps practices, including:
 
----
+* Data Processing
+* Model Training
+* Experiment Tracking
+* Model Versioning
+* Artifact Management
+* API Deployment
+* CI/CD Automation
+* Kubernetes Orchestration
+* GitOps Deployment
+* Monitoring & Observability
 
-# 🏗️ System Architecture
-
-IMDb Dataset  
-→ Data Preprocessing  
-→ Model Training (Scikit-learn)  
-→ MLflow Experiment Tracking  
-→ Model Artifact (.pkl)  
-→ FastAPI Service  
-→ Docker Containerization  
-→ GitHub Actions CI/CD Pipeline  
-→ Docker Hub Registry  
-→ Kubernetes Cluster (AWS EC2)  
-→ ArgoCD (GitOps Continuous Deployment)  
-→ Prometheus (Metrics Collection)  
-→ Grafana (Visualization Dashboard)
+The objective of this project is to simulate how machine learning systems are deployed and maintained in real-world enterprise environments.
 
 ---
 
-# 🧠 Machine Learning Pipeline
+# 🏗️ Solution Architecture
+
+```text
+IMDb Dataset
+     │
+     ▼
+Data Preprocessing
+     │
+     ▼
+Model Training
+     │
+     ▼
+MLflow Experiment Tracking
+     │
+     ▼
+Model Artifact (.pkl)
+     │
+     ▼
+DVC Version Control
+     │
+     ▼
+AWS S3 Remote Storage
+     │
+     ▼
+FastAPI Inference Service
+     │
+     ▼
+Docker Containerization
+     │
+     ▼
+GitHub Actions CI/CD
+     │
+     ▼
+Docker Hub Registry
+     │
+     ▼
+Kubernetes Cluster (AWS EC2)
+     │
+     ▼
+ArgoCD GitOps Deployment
+     │
+     ▼
+Prometheus Monitoring
+     │
+     ▼
+Grafana Dashboards
+```
+
+---
+
+# 🎯 Key Features
+
+### Machine Learning
+
+* IMDb Rating Prediction Model
+* Scikit-Learn Regression Pipeline
+* Feature Engineering
+* Automated Training Workflow
+
+### Experiment Tracking
+
+* MLflow Integration
+* Parameter Tracking
+* Metrics Tracking
+* Model Artifact Logging
+
+### Data & Model Versioning
+
+* DVC Integration
+* AWS S3 Remote Storage
+* Reproducible Model Management
+
+### API Development
+
+* FastAPI-based Prediction Service
+* RESTful API Endpoints
+* Health Checks
+* Metrics Exposure
+
+### Containerization
+
+* Dockerized Application
+* Portable Deployments
+* Environment Consistency
+
+### CI/CD Automation
+
+* GitHub Actions Pipeline
+* Automated Docker Builds
+* Docker Hub Push Automation
+* Deployment Manifest Updates
+
+### Kubernetes Deployment
+
+* Kubernetes Deployments
+* Services
+* Self-Healing Pods
+* Scalable Architecture
+
+### GitOps Automation
+
+* ArgoCD Integration
+* Automated Synchronization
+* Continuous Delivery
+* Version-Controlled Deployments
+
+### Monitoring & Observability
+
+* Prometheus Metrics Collection
+* Grafana Dashboards
+* Application Monitoring
+* Request Tracking
+
+---
+
+# 🧠 Machine Learning Workflow
 
 ## Dataset
-IMDb movie dataset used for regression task.
+
+IMDb Movies Dataset
 
 ## Features
-- Year of release  
-- Runtime  
-- Number of votes  
+
+* Release Year
+* Runtime
+* Number of Votes
+
+## Target
+
+IMDb Movie Rating Prediction
 
 ## Model
-- Scikit-learn regression model  
-- Predicts IMDb rating  
+
+Scikit-Learn Regression Model
 
 ## Output Artifact
+
 models/movie_rating_model.pkl
 
 ---
 
-# 🌐 FastAPI Service
+# 🌐 FastAPI Endpoints
 
-## API Endpoints
+## Health Check
 
-### Health Check
+```http
 GET /
+```
 
-### Prediction API
+## Prediction Endpoint
+
+```http
 POST /predict
+```
 
-## Sample Request
+### Request Example
+
+```json
 {
   "year": 2020,
   "runtime_minutes": 120,
   "num_votes": 50000
 }
+```
 
-## Sample Response
+### Response Example
+
+```json
 {
   "predicted_rating": 7.8
 }
+```
 
 ## Metrics Endpoint
-/metrics (Prometheus scraping endpoint)
+
+```http
+GET /metrics
+```
+
+Used by Prometheus for application monitoring.
 
 ---
 
-# 🐳 Docker Setup
+# 🐳 Docker
 
-## Build Docker Image
+## Build Image
+
+```bash
 docker build -t imdb-rating-api .
+```
 
 ## Run Container
-docker run -p 8000:8000 imdb-rating-api
 
-## Purpose
-- Ensures environment consistency  
-- Portable deployment across systems  
-- Works locally and in Kubernetes  
+```bash
+docker run -p 8000:8000 imdb-rating-api
+```
 
 ---
 
-# ⚙️ CI/CD Pipeline (GitHub Actions)
+# ⚙️ CI/CD Pipeline
 
-## Workflow Summary
+The GitHub Actions workflow automates:
 
-This pipeline automates the entire deployment process:
+* Source Code Checkout
+* Docker Image Build
+* Docker Hub Push
+* Kubernetes Manifest Update
+* Automatic Commit
+* Continuous Deployment Trigger
 
-✔ Code checkout  
-✔ Docker image build  
-✔ Push image to Docker Hub  
-✔ Update Kubernetes deployment YAML  
-✔ Commit updated manifests  
-✔ Trigger automatic deployment  
+### Workflow
 
+```text
+Developer Push
+      │
+      ▼
+GitHub Actions
+      │
+      ▼
+Docker Build
+      │
+      ▼
+Docker Hub Push
+      │
+      ▼
+Manifest Update
+      │
+      ▼
+GitHub Repository
+      │
+      ▼
+ArgoCD Sync
+      │
+      ▼
+Kubernetes Deployment
+```
+
+---
 
 # ☸️ Kubernetes Deployment
 
-## Deployment
-FastAPI application deployed in Kubernetes cluster.
+Resources Used:
 
-## Service Type
-NodePort service exposed externally.
+* Deployment
+* Service
+* Namespace
+* Configurations
 
-## Access URL
-http://<EC2-PUBLIC-IP>:30007
+### Benefits
 
-## Features
-- Auto scaling  
-- Self-healing pods  
-- High availability  
+* Auto Recovery
+* High Availability
+* Scalability
+* Production Deployment
 
 ---
 
 # 🔁 GitOps with ArgoCD
 
-## Setup
-- ArgoCD installed on Kubernetes cluster  
-- GitHub repository connected  
-- Auto-sync enabled  
+ArgoCD continuously monitors the Git repository.
 
-## Workflow
-Git Push → ArgoCD detects changes → Kubernetes automatically updates deployment  
+Whenever a deployment manifest changes:
 
-## Benefits
-- No manual kubectl apply  
-- Fully automated deployments  
-- Version-controlled infrastructure  
+```text
+Git Push
+    │
+    ▼
+ArgoCD Detects Change
+    │
+    ▼
+Automatic Synchronization
+    │
+    ▼
+Kubernetes Updated
+```
+
+### Advantages
+
+* Fully Automated Deployments
+* No Manual kubectl Apply
+* Git as Single Source of Truth
 
 ---
 
-# 📊 Monitoring & Observability
+# 📊 Monitoring Stack
 
 ## Prometheus
-Collects metrics such as:
-- HTTP request counts  
-- Latency  
-- Application performance  
+
+Collects:
+
+* HTTP Request Metrics
+* API Latency
+* Application Metrics
+* System Metrics
 
 ## Grafana
-Provides dashboards for:
-- API performance  
-- Traffic monitoring  
-- System health  
+
+Visualizes:
+
+* Request Traffic
+* API Performance
+* Resource Usage
+* Service Health
 
 ---
 
-# 🔐 Infrastructure Used
+# ☁️ Cloud Infrastructure
 
-- AWS EC2 (Kubernetes Cluster Node)  
-- Docker (Containerization)  
-- Docker Hub (Image Registry)  
-- GitHub Actions (CI/CD Automation)  
-- Kubernetes (Orchestration)  
-- ArgoCD (GitOps Deployment)  
-- Prometheus (Monitoring)  
-- Grafana (Visualization)  
+### AWS EC2
 
----
+Hosts Kubernetes Cluster
 
-# 🚀 Key Features
+### AWS S3
 
-✔ End-to-end ML lifecycle automation  
-✔ Production-grade deployment architecture  
-✔ CI/CD pipeline using GitHub Actions  
-✔ Kubernetes orchestration  
-✔ GitOps-based deployment (ArgoCD)  
-✔ Monitoring & observability system  
-✔ Scalable cloud-native design  
+Stores DVC Versioned Artifacts
+
+### Docker Hub
+
+Stores Container Images
 
 ---
 
-# 🧠 What This Project Demonstrates
+# 🛠️ Technology Stack
 
-This project demonstrates real-world engineering skills:
+| Category            | Tools          |
+| ------------------- | -------------- |
+| Programming         | Python         |
+| ML Framework        | Scikit-Learn   |
+| Experiment Tracking | MLflow         |
+| Versioning          | DVC            |
+| Storage             | AWS S3         |
+| API                 | FastAPI        |
+| Containerization    | Docker         |
+| CI/CD               | GitHub Actions |
+| Registry            | Docker Hub     |
+| Orchestration       | Kubernetes     |
+| GitOps              | ArgoCD         |
+| Monitoring          | Prometheus     |
+| Dashboards          | Grafana        |
+| Cloud               | AWS EC2        |
 
-- Machine Learning Engineering  
-- MLOps pipeline design  
-- DevOps automation  
-- Cloud deployment (AWS)  
-- Kubernetes orchestration  
-- CI/CD pipeline implementation  
-- Observability and monitoring  
-- Production system architecture  
+---
+
+# 🚀 Skills Demonstrated
+
+* Machine Learning Engineering
+* MLOps
+* DevOps
+* Kubernetes
+* GitOps
+* CI/CD
+* Cloud Computing
+* Monitoring & Observability
+* Containerization
+* Infrastructure Automation
+
+---
+
+# 📈 Project Impact
+
+This project showcases how modern machine learning systems are:
+
+* Built
+* Versioned
+* Tracked
+* Containerized
+* Deployed
+* Monitored
+* Automated
+
+using industry-standard tools and cloud-native practices.
 
 ---
 
 # 👨‍💻 Author
 
-Venkatesh Pinjala
+**Venkatesh Pinjala**
+
+
+---
+
+⭐ If you found this project useful, consider giving it a star.
